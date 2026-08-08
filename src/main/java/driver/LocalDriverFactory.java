@@ -8,9 +8,9 @@ public class LocalDriverFactory {
     public AppiumDriver createDriver(){
         String platform = ConfigManager.getPlatform();
         if("Android".equalsIgnoreCase(platform)){
-            return new AndroidDriverFactory().createAndroidDriver();
+            return AndroidDriverFactory.createAndroidDriver();
         } else if ("iOS".equalsIgnoreCase(platform)) {
-            return new IOSDriverFactory().createIOSDriver();
+            return IOSDriverFactory.createIOSDriver();
         }
         throw new RuntimeException("Unsupported Platform " +platform);
     }
