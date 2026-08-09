@@ -3,9 +3,11 @@ package driver;
 import config.ConfigManager;
 import io.appium.java_client.AppiumDriver;
 
+import java.net.MalformedURLException;
+
 public class LocalDriverFactory {
 
-    public AppiumDriver createDriver(){
+    public AppiumDriver createDriver() throws MalformedURLException {
         String platform = ConfigManager.getPlatform();
         if("Android".equalsIgnoreCase(platform)){
             return AndroidDriverFactory.createAndroidDriver();
