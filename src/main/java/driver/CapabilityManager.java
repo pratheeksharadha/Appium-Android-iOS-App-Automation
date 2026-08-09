@@ -10,24 +10,33 @@ import java.util.Objects;
 public class CapabilityManager {
     Object options;
 
-    public Object getOptions(){
+    public Object getOptions() {
 
-        if(ConfigManager.getPlatformName().equalsIgnoreCase("Android")){
-            options = new AndroidCapabilityBuilder().build();
-        } else if (ConfigManager.getPlatformName().equalsIgnoreCase("IOS")) {
-            options = new IOSCapabilityBuilder().build();
-        }
-
-        if(ConfigManager.getExecution().equalsIgnoreCase("sauce")){
-            MutableCapabilities sauceOptions = new SauceCapabilityBuilder().build();
-
-            if (options instanceof UiAutomator2Options androidOptions) {
-                androidOptions.setCapability("sauce:options", sauceOptions);
-            } else if (options instanceof XCUITestOptions iosOptions) {
-                iosOptions.setCapability("sauce:options", sauceOptions);
+        if (ConfigManager.getExecution().equalsIgnoreCase("local")) {
+            if (ConfigManager.getPlatformName().equalsIgnoreCase("Android")) {
+                options = new AndroidCapabilityBuilder().build();
+//            } else if (ConfigManager.getPlatformName().equalsIgnoreCase("IOS")) {
+//                options = new IOSCapabilityBuilder().build();
+//            }
             }
+        }
+        if (ConfigManager.getExecution().equalsIgnoreCase("sauce")) {
+            if (ConfigManager.getPlatformName().equalsIgnoreCase("Android")) {
+                options = new AndroidCapabilityBuilder().build();
+            } else if (ConfigManager.getPlatformName().equalsIgnoreCase("IOS")) {
+                options = new IOSCapabilityBuilder().build();
+            }
+        }
+        MutableCapabilities sauceOptions = new SauceCapabilityBuilder().build();
+        if (options instanceof UiAutomator2Options androidOptions) {
+            androidOptions.setCapability("sauce:options", sauceOptions);
+            System.out.println(androidOptions);
+            options = (Object) androidOptions;
+        } else if (options instanceof XCUITestOptions iosOptions) {
+            iosOptions.setCapability("sauce:options", sauceOptions);
+            System.out.println(iosOptions);
+            options =  (Object) iosOptions;
         }
         return options;
     }
-
 }

@@ -14,7 +14,7 @@ public class AppiumServerManager {
 
         AppiumServiceBuilder serviceBuilder = new AppiumServiceBuilder()
                 .withIPAddress("127.0.0.1")
-                .usingPort(4725);
+                .usingPort(4723);
 
         appiumService = AppiumDriverLocalService.buildService(serviceBuilder);
 

@@ -13,6 +13,7 @@ public class IOSCapabilityBuilder extends BaseCpabilityBuilder{
         options.setAutomationName(ConfigManager.getAutomationName());
         options.setDeviceName(ConfigManager.getDeviceName());
         options.setApp(ConfigManager.getAppPath());
+        System.out.println(options);
         return options;
     }
 }

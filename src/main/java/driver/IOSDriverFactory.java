@@ -19,8 +19,11 @@ public class IOSDriverFactory {
 
         if (ConfigManager.getExecution().equalsIgnoreCase("local")) {
             driver = new IOSDriver(URI.create(ConfigManager.getAppiumUrl()).toURL(), iosOptions);
-        } else {
+            System.out.println(driver.getCapabilities());
+        } else if (ConfigManager.getExecution().equalsIgnoreCase("sauce"))
+        {
             driver = new IOSDriver(URI.create(ConfigManager.getSauceUrl()).toURL(), iosOptions);
+            System.out.println(driver.getCapabilities());
         }
 
         DriverManager.setDriver(driver);

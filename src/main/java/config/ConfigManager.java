@@ -43,6 +43,16 @@ public class ConfigManager {
     public static String getDeviceName(){
         return PropertyManager.getDevice("deviceName");
     }
+
+    public static String getUdid(){
+        return PropertyManager.getDevice("udid");
+    }
+
+    public static String getplatformVersion(){
+        return PropertyManager.getDevice("platformVersion");
+    }
+
+
     public static String getSauceUsername(){
         return PropertyManager.getSauce("username");
     }
@@ -51,6 +61,10 @@ public class ConfigManager {
     }
     public static String getSauceUrl(){
         return PropertyManager.getSauce("url");
+    }
+
+    public static String getSauceFileID(){
+        return PropertyManager.getEnvironment("sauceFileID");
     }
 
 
