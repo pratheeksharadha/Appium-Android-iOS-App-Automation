@@ -19,7 +19,6 @@ public class DriverManager {
     }
 
     public static void unload(){
-
         DRIVER.remove();
     }
 }

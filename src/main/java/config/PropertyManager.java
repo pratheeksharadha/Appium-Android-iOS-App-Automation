@@ -9,9 +9,11 @@ public class PropertyManager {
     private static ConfigReader deviceReader;
     private static ConfigReader sauceReader;
 
+    private static String environment;
+
     static{
         configReader = new ConfigReader(FrameworkConstants.CONFIG_PATH);
-        String environment = configReader.getProperty("environment");
+        environment = configReader.getProperty("environment");
         String platform = configReader.getProperty("platform");
         String execution = configReader.getProperty("execution");
 
