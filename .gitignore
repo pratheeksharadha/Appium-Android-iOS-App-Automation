@@ -58,7 +58,7 @@ logs/
 *.log
 
 # Reports
-reports/
+Logs/
 extent-reports/
 
 # Screenshots

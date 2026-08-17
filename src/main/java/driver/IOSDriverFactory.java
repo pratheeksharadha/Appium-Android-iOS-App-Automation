@@ -5,15 +5,19 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
+import org.apache.logging.log4j.Logger;
+import utils.LoggerUtils;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 
 public class IOSDriverFactory {
 
+    private static final Logger logger = LoggerUtils.getLogger(IOSDriverFactory.class);
     static IOSDriver driver;
     public static IOSDriver createIOSDriver() throws MalformedURLException {
-        //System.out.println("iOS driver is created here");
+        logger.info("Creating IOS Driver Created");
+
         CapabilityManager capabilityManager = new CapabilityManager();
         XCUITestOptions iosOptions = (XCUITestOptions) capabilityManager.getOptions();
 
@@ -27,6 +31,7 @@ public class IOSDriverFactory {
         }
 
         DriverManager.setDriver(driver);
+        logger.info("IOS Driver Created Successfully");
         return  driver;
 
 
