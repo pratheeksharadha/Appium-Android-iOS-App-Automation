@@ -39,6 +39,16 @@ public class BaseTest {
     @BeforeMethod
     public void setup() throws MalformedURLException {
         logger.info("Starting test setup");
+        logger.info("Execution      : {}", ConfigManager.getExecution());
+        logger.info("Platform       : {}", ConfigManager.getPlatform());
+        logger.info("Environment    : {}", ConfigManager.getEnvironment());
+        logger.info("Device Name    : {}", ConfigManager.getDeviceName());
+        logger.info("Application    : {}", ConfigManager.getAppPath());
+        if (ConfigManager.getExecution().equalsIgnoreCase("local")) {
+            logger.info("Appium Server : {}", ConfigManager.getAppiumUrl());
+        } else {
+            logger.info("Sauce URL     : {}", ConfigManager.getSauceUrl());
+        }
 
         initializeDriver();
 
@@ -68,7 +78,9 @@ public class BaseTest {
     protected void quitDriver() {
         if (DriverManager.getDriver() != null) {
             DriverManager.getDriver().quit();
+            logger.info("Driver closed successfully.");
             DriverManager.unload();
+            logger.info("Driver removed from ThreadLocal.");
         }
 
     }

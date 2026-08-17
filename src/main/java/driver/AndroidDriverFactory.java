@@ -27,7 +27,7 @@ public class AndroidDriverFactory {
         }
 
         DriverManager.setDriver(driver);
-        logger.info("Android Driver Created Successfully");
+        logger.info("Creating Driver : {} ",ConfigManager.getPlatform());
 
         return driver;
     }

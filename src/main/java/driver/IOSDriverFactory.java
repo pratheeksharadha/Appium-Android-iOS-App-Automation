@@ -31,7 +31,7 @@ public class IOSDriverFactory {
         }
 
         DriverManager.setDriver(driver);
-        logger.info("IOS Driver Created Successfully");
+        logger.info("Creating Driver : {} ",ConfigManager.getPlatform());
         return  driver;
 
 

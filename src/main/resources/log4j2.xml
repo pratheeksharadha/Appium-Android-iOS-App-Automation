@@ -22,7 +22,7 @@
 
         <File
                 name="File"
-                fileName="Logs/framework-${date:yyyy-MM-dd_HH-mm-ss}.log"
+                fileName="${sys:user.dir}/reports/Logs/framework-${date:yyyy-MM-dd_HH-mm-ss}.log"
                 append="false">
 
             <PatternLayout pattern="${LOG_PATTERN}"/>
