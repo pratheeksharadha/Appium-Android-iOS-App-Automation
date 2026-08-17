@@ -11,7 +11,6 @@ public class SauceDriverFactory {
         String platform = ConfigManager.getPlatform();
         if("Android".equalsIgnoreCase(platform)){
             return AndroidDriverFactory.createAndroidDriver();
-
         } else if ("iOS".equalsIgnoreCase(platform)) {
             return IOSDriverFactory.createIOSDriver();
         }

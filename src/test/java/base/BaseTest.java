@@ -17,8 +17,6 @@ public class BaseTest {
         if (ConfigManager.getExecution().equalsIgnoreCase("local")) {
             AppiumServerManager.startServer();
         }
-        //AppiumServerManager.startServer();
-        //initializeDriver();
     }
 
     @AfterSuite

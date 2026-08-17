@@ -18,7 +18,7 @@ public class AndroidCapabilityBuilder extends BaseCpabilityBuilder{
             options.setPlatformName(ConfigManager.getPlatformName());
             options.setAutomationName(ConfigManager.getAutomationName());
             options.setDeviceName(ConfigManager.getDeviceName());
-            options.setPlatformVersion(ConfigManager.getplatformVersion());
+            options.setPlatformVersion(ConfigManager.getPlatformVersion());
             options.setApp("storage:" +ConfigManager.getSauceFileID());
         }
         System.out.println(options);

@@ -29,7 +29,14 @@ public class ConfigManager {
     }
 
     public static String getAppPath(){
-        return PropertyManager.getEnvironment("app.path");
+        String app_path="";
+        if("Android".equalsIgnoreCase(PropertyManager.getConfig(("platform")))){
+            app_path = PropertyManager.getEnvironment("Android_app.path");
+        } else if ("iOS".equalsIgnoreCase(PropertyManager.getConfig(("platform")))) {
+            app_path = PropertyManager.getEnvironment("iOS_app.path");
+        }
+        System.out.println("App Path ="+app_path);
+        return app_path;
     }
     public static String getApiTimeout(){
         return PropertyManager.getEnvironment("api.timeout");
@@ -48,7 +55,7 @@ public class ConfigManager {
         return PropertyManager.getDevice("udid");
     }
 
-    public static String getplatformVersion(){
+    public static String getPlatformVersion(){
         return PropertyManager.getDevice("platformVersion");
     }
 
@@ -64,7 +71,15 @@ public class ConfigManager {
     }
 
     public static String getSauceFileID(){
-        return PropertyManager.getEnvironment("sauceFileID");
+        String sauceFileId = "";
+        if("iOS".equalsIgnoreCase(PropertyManager.getConfig("platform"))){
+            sauceFileId = PropertyManager.getEnvironment("iOS_sauceFileID");
+        } else if ("Android".equalsIgnoreCase(PropertyManager.getConfig("platform"))) {
+            sauceFileId = PropertyManager.getEnvironment("Android_sauceFileID");
+        }
+
+        System.out.println("Sauce_file_ID" +sauceFileId);
+        return sauceFileId;
     }
 
 

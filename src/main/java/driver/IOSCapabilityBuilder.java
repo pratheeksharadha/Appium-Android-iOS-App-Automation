@@ -8,12 +8,37 @@ public class IOSCapabilityBuilder extends BaseCpabilityBuilder{
 
     @Override
     public XCUITestOptions build() {
+
+//        UiAutomator2Options options = new UiAutomator2Options();
+//
+//        if(ConfigManager.getExecution().equalsIgnoreCase("local")){
+//            options.setPlatformName(ConfigManager.getPlatformName());
+//            options.setAutomationName(ConfigManager.getAutomationName());
+//            options.setUdid(ConfigManager.getUdid());
+//            options.setApp(ConfigManager.getAppPath());
+//        } else if (ConfigManager.getExecution().equalsIgnoreCase("sauce")) {
+//            options.setPlatformName(ConfigManager.getPlatformName());
+//            options.setAutomationName(ConfigManager.getAutomationName());
+//            options.setDeviceName(ConfigManager.getDeviceName());
+//            options.setPlatformVersion(ConfigManager.getPlatformVersion());
+//            options.setApp("storage:" +ConfigManager.getSauceFileID());
+//        }
+//        System.out.println(options);
+//        return options;
+
         XCUITestOptions options = new XCUITestOptions();
-        options.setPlatformName(ConfigManager.getPlatformName());
-        options.setAutomationName(ConfigManager.getAutomationName());
-        options.setDeviceName(ConfigManager.getDeviceName());
-        options.setApp(ConfigManager.getAppPath());
-        System.out.println(options);
+
+        if(ConfigManager.getExecution().equalsIgnoreCase("local")){
+            options.setPlatformName(ConfigManager.getPlatformName());
+            options.setAutomationName(ConfigManager.getAutomationName());
+          options.setApp(ConfigManager.getAppPath());
+        }else if (ConfigManager.getExecution().equalsIgnoreCase("sauce")) {
+            options.setPlatformName(ConfigManager.getPlatformName());
+            options.setAutomationName(ConfigManager.getAutomationName());
+            options.setDeviceName(ConfigManager.getDeviceName());
+            options.setPlatformVersion(ConfigManager.getPlatformVersion());
+            options.setApp("storage:" +ConfigManager.getSauceFileID());
+        }
         return options;
     }
 }
