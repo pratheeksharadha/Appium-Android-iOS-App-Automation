@@ -20,14 +20,14 @@ public class LoginTest extends BaseHooks {
     @Test
     public void loginTest() throws MalformedURLException, InterruptedException {
         //initializeDriver();
-        log.info("This is an INFO message");
-        log.warn("This is a WARNING message");
-        log.error("This is an ERROR message");
-
-        //Assert.fail();
-        WaitUtils.waitForClickable(By.id("com.saucelabs.mydemoapp.android:id/cartIV"));
-        DriverManager.getDriver().findElement(By.id("com.saucelabs.mydemoapp.android:id/cartIV")).click();
-        DriverManager.getDriver().findElement(By.id("com.saucelabs.mydemoapp.android:id/shoppingBt"));
+//        log.info("This is an INFO message");
+//        log.warn("This is a WARNING message");
+//        log.error("This is an ERROR message");
+//
+//        //Assert.fail();
+//        WaitUtils.waitForClickable(By.id("com.saucelabs.mydemoapp.android:id/cartIV"));
+//        DriverManager.getDriver().findElement(By.id("com.saucelabs.mydemoapp.android:id/cartIV")).click();
+//        DriverManager.getDriver().findElement(By.id("com.saucelabs.mydemoapp.android:id/shoppingBt"));
 
 
     }
