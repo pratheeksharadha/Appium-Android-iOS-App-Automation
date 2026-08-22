@@ -20,8 +20,8 @@ public class ConfigManager {
         return PropertyManager.getConfig("implicit.wait");
     }
 
-    public static String getExplicitWait(){
-        return PropertyManager.getConfig("explicit.wait");
+    public static Long getExplicitWait(){
+        return Long.parseLong(PropertyManager.getConfig("explicit.wait"));
     }
 
     public static String getAppiumUrl(){
