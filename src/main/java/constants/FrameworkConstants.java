@@ -1,12 +1,17 @@
+
 package constants;
 
-public class FrameworkConstants {
+public final class FrameworkConstants {
+
+    private FrameworkConstants() {
+    }
 
     public static final String CONFIG_FOLDER =
             "src/main/resources/config/";
 
     public static final String CONFIG_PATH =
             CONFIG_FOLDER + "config.properties";
+
     public static final String RESOURCE_PATH =
             "src/main/resources/";
 
@@ -14,7 +19,7 @@ public class FrameworkConstants {
             "test-output/";
 
     public static final String SCREENSHOT_PATH =
-            "test-output/screenshots/";
+            REPORT_PATH + "screenshots/";
 
     public static final String FEATURE_PATH =
             "src/test/resources/features/";
@@ -25,5 +30,4 @@ public class FrameworkConstants {
     public static final int DEFAULT_IMPLICIT_WAIT = 10;
 
     public static final int DEFAULT_EXPLICIT_WAIT = 20;
-
 }

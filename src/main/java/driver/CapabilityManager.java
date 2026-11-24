@@ -1,42 +1,77 @@
+
 package driver;
 
 import config.ConfigManager;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.ios.options.XCUITestOptions;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.MutableCapabilities;
 
-import java.util.Objects;
+public final class CapabilityManager {
 
-public class CapabilityManager {
-    Object options;
+    public Capabilities getOptions() {
 
-    public Object getOptions() {
+        String execution = ConfigManager.getExecution();
+        String platform = ConfigManager.getPlatformName();
 
-        if (ConfigManager.getExecution().equalsIgnoreCase("local")) {
-            if (ConfigManager.getPlatformName().equalsIgnoreCase("Android")) {
-                options = new AndroidCapabilityBuilder().build();
-//            } else if (ConfigManager.getPlatformName().equalsIgnoreCase("IOS")) {
-//                options = new IOSCapabilityBuilder().build();
-//            }
-            }
+        validateExecution(execution, platform);
+
+        if ("Android".equalsIgnoreCase(platform)) {
+
+            UiAutomator2Options options =
+                    new AndroidCapabilityBuilder().build();
+
+            attachSauceOptions(options, execution);
+
+            return options;
         }
-        if (ConfigManager.getExecution().equalsIgnoreCase("sauce")) {
-            if (ConfigManager.getPlatformName().equalsIgnoreCase("Android")) {
-                options = new AndroidCapabilityBuilder().build();
-            } else if (ConfigManager.getPlatformName().equalsIgnoreCase("IOS")) {
-                options = new IOSCapabilityBuilder().build();
-            }
+
+        if ("iOS".equalsIgnoreCase(platform)) {
+
+            XCUITestOptions options =
+                    new IOSCapabilityBuilder().build();
+
+            attachSauceOptions(options, execution);
+
+            return options;
         }
-        MutableCapabilities sauceOptions = new SauceCapabilityBuilder().build();
-        if (options instanceof UiAutomator2Options androidOptions) {
-            androidOptions.setCapability("sauce:options", sauceOptions);
-            System.out.println(androidOptions);
-            options = (Object) androidOptions;
-        } else if (options instanceof XCUITestOptions iosOptions) {
-            iosOptions.setCapability("sauce:options", sauceOptions);
-            System.out.println(iosOptions);
-            options =  (Object) iosOptions;
+
+        throw new IllegalArgumentException(
+                "Unsupported platform: " + platform
+        );
+    }
+
+    private void validateExecution(String execution, String platform) {
+
+        if (!"local".equalsIgnoreCase(execution)
+                && !"sauce".equalsIgnoreCase(execution)) {
+
+            throw new IllegalArgumentException(
+                    "Unsupported execution type: " + execution
+            );
         }
-        return options;
+
+        if ("local".equalsIgnoreCase(execution)
+                && "iOS".equalsIgnoreCase(platform)) {
+
+            throw new UnsupportedOperationException(
+                    "Local iOS execution is not supported. "
+                            + "Use Sauce Labs for iOS execution."
+            );
+        }
+    }
+
+    private void attachSauceOptions(
+            MutableCapabilities options,
+            String execution
+    ) {
+
+        if ("sauce".equalsIgnoreCase(execution)) {
+
+            options.setCapability(
+                    "sauce:options",
+                    new SauceCapabilityBuilder().build()
+            );
+        }
     }
 }

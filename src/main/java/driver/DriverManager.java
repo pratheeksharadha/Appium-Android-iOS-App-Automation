@@ -1,24 +1,32 @@
+
 package driver;
 
 import io.appium.java_client.AppiumDriver;
 
-public class DriverManager {
+import java.util.Objects;
 
-    public DriverManager(){
+public final class DriverManager {
+
+    private static final ThreadLocal<AppiumDriver> DRIVER =
+            new ThreadLocal<>();
+
+    private DriverManager() {
     }
 
-    public static final ThreadLocal<AppiumDriver> DRIVER = new ThreadLocal<>();
-
-    public static void setDriver(AppiumDriver driver){
-        DRIVER.set(driver);
-        //System.out.println("driver is set in local");
+    public static void setDriver(AppiumDriver driver) {
+        DRIVER.set(
+                Objects.requireNonNull(
+                        driver,
+                        "Cannot register a null Appium driver."
+                )
+        );
     }
 
-    public static AppiumDriver getDriver(){
+    public static AppiumDriver getDriver() {
         return DRIVER.get();
     }
 
-    public static void unload(){
+    public static void unload() {
         DRIVER.remove();
     }
 }

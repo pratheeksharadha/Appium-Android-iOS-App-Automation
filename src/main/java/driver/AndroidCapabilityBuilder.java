@@ -1,27 +1,71 @@
+
 package driver;
 
 import config.ConfigManager;
 import io.appium.java_client.android.options.UiAutomator2Options;
 
-public class AndroidCapabilityBuilder extends BaseCpabilityBuilder{
+public class AndroidCapabilityBuilder
+        extends BaseCapabilityBuilder<UiAutomator2Options> {
 
     @Override
     public UiAutomator2Options build() {
+
+        String execution = ConfigManager.getExecution();
+
         UiAutomator2Options options = new UiAutomator2Options();
 
-        if(ConfigManager.getExecution().equalsIgnoreCase("local")){
-            options.setPlatformName(ConfigManager.getPlatformName());
-            options.setAutomationName(ConfigManager.getAutomationName());
-            options.setUdid(ConfigManager.getUdid());
-            options.setApp(ConfigManager.getAppPath());
-        } else if (ConfigManager.getExecution().equalsIgnoreCase("sauce")) {
-            options.setPlatformName(ConfigManager.getPlatformName());
-            options.setAutomationName(ConfigManager.getAutomationName());
-            options.setDeviceName(ConfigManager.getDeviceName());
-            options.setPlatformVersion(ConfigManager.getPlatformVersion());
-            options.setApp("storage:" +ConfigManager.getSauceFileID());
+        options.setPlatformName(ConfigManager.getPlatformName());
+        options.setAutomationName(ConfigManager.getAutomationName());
+
+        if ("local".equalsIgnoreCase(execution)) {
+
+            options.setUdid(requireValue(
+                    ConfigManager.getUdid(),
+                    "Android UDID"
+            ));
+
+            options.setApp(requireValue(
+                    ConfigManager.getAppPath(),
+                    "Local Android application path"
+            ));
+
+        } else if ("sauce".equalsIgnoreCase(execution)) {
+
+            options.setDeviceName(requireValue(
+                    ConfigManager.getDeviceName(),
+                    "Sauce Labs device name"
+            ));
+
+            options.setPlatformVersion(requireValue(
+                    ConfigManager.getPlatformVersion(),
+                    "Sauce Labs platform version"
+            ));
+
+            String sauceFileId = requireValue(
+                    ConfigManager.getSauceFileID(),
+                    "Sauce Labs application ID"
+            );
+
+            options.setApp("storage:" + sauceFileId);
+
+        } else {
+
+            throw new IllegalArgumentException(
+                    "Unsupported execution type: " + execution
+            );
         }
-        System.out.println(options);
+
         return options;
+    }
+
+    private String requireValue(String value, String propertyName) {
+
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException(
+                    "Missing required configuration: " + propertyName
+            );
+        }
+
+        return value.trim();
     }
 }

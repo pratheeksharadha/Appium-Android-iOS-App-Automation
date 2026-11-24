@@ -1,8 +1,9 @@
+
 package config;
 
 import constants.FrameworkConstants;
 
-public class PropertyManager {
+public final class PropertyManager {
 
     private static ConfigReader configReader;
     private static ConfigReader environmentReader;
@@ -10,45 +11,135 @@ public class PropertyManager {
     private static ConfigReader sauceReader;
 
     private static String environment;
+    private static String platform;
+    private static String execution;
 
-    static{
+    static {
+        loadProperties();
+    }
+
+    private PropertyManager() {
+    }
+
+    private static void loadProperties() {
+
         configReader = new ConfigReader(FrameworkConstants.CONFIG_PATH);
-        environment = configReader.getProperty("environment");
-        String platform = configReader.getProperty("platform");
-        String execution = configReader.getProperty("execution");
 
+        environment = requireProperty(
+                configReader, "environment", "config.properties"
+        );
 
-        environmentReader = new ConfigReader(FrameworkConstants.CONFIG_FOLDER +environment+".properties");
+        platform = requireProperty(
+                configReader, "platform", "config.properties"
+        );
 
-        deviceReader = new ConfigReader(FrameworkConstants.CONFIG_FOLDER +platform+".properties");
+        execution = requireProperty(
+                configReader, "execution", "config.properties"
+        );
 
-        if("sauce".equalsIgnoreCase(execution)){
-            sauceReader = new ConfigReader(FrameworkConstants.CONFIG_FOLDER +"sauce.properties");
+        validateConfiguration();
+
+        environmentReader = new ConfigReader(
+                FrameworkConstants.CONFIG_FOLDER + environment + ".properties"
+        );
+
+        deviceReader = new ConfigReader(
+                FrameworkConstants.CONFIG_FOLDER + platform + ".properties"
+        );
+
+        if ("sauce".equalsIgnoreCase(execution)) {
+            sauceReader = new ConfigReader(
+                    FrameworkConstants.CONFIG_FOLDER + "sauce.properties"
+            );
+        }
+    }
+
+    private static void validateConfiguration() {
+
+        if (!"local".equalsIgnoreCase(execution)
+                && !"sauce".equalsIgnoreCase(execution)) {
+            throw new IllegalArgumentException(
+                    "Unsupported execution type: " + execution
+            );
         }
 
-
-    }
-
-    public PropertyManager(){
-
-    }
-
-    public static String getConfig(String key){
-        return configReader.getProperty(key);
-    }
-
-    public static String getEnvironment(String key){
-        return environmentReader.getProperty(key);
-    }
-
-    public static String getDevice(String key){
-        return deviceReader.getProperty(key);
-    }
-
-    public static String getSauce(String key){
-        if(sauceReader==null){
-            return null;
+        if (!"Android".equalsIgnoreCase(platform)
+                && !"iOS".equalsIgnoreCase(platform)) {
+            throw new IllegalArgumentException(
+                    "Unsupported platform: " + platform
+            );
         }
-        return sauceReader.getProperty(key);
+
+        if ("local".equalsIgnoreCase(execution)
+                && "iOS".equalsIgnoreCase(platform)) {
+            throw new UnsupportedOperationException(
+                    "Local iOS execution is not supported in the current "
+                            + "Windows environment. Use Sauce Labs."
+            );
+        }
+
+        if (environment.isBlank()) {
+            throw new IllegalStateException(
+                    "Environment cannot be blank."
+            );
+        }
+    }
+
+    public static String getConfig(String key) {
+        return requireProperty(configReader, key, "config.properties");
+    }
+
+    public static String getEnvironment(String key) {
+        return requireProperty(
+                environmentReader, key, environment + ".properties"
+        );
+    }
+
+    public static String getDevice(String key) {
+        return requireProperty(
+                deviceReader, key, platform + ".properties"
+        );
+    }
+
+    public static String getSauce(String key) {
+
+        if (sauceReader == null) {
+            throw new IllegalStateException(
+                    "Sauce configuration is unavailable. "
+                            + "Current execution mode: " + execution
+            );
+        }
+
+        return requireProperty(sauceReader, key, "sauce.properties");
+    }
+
+    private static String requireProperty(
+            ConfigReader reader,
+            String key,
+            String fileName
+    ) {
+
+        if (reader == null) {
+            throw new IllegalStateException(
+                    "Configuration reader is not initialized for " + fileName
+            );
+        }
+
+        if (key == null || key.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Configuration property key cannot be blank."
+            );
+        }
+
+        String value = reader.getProperty(key);
+
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException(
+                    "Missing or empty configuration property: "
+                            + key + " in " + fileName
+            );
+        }
+
+        return value.trim();
     }
 }

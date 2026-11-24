@@ -3,16 +3,35 @@ package driver;
 import config.ConfigManager;
 import org.openqa.selenium.MutableCapabilities;
 
-public class SauceCapabilityBuilder {
+public final class SauceCapabilityBuilder {
 
-    public MutableCapabilities build(){
+    public MutableCapabilities build() {
+
         MutableCapabilities sauceOptions = new MutableCapabilities();
-        sauceOptions.setCapability("build", "Mobile Framework");
-        sauceOptions.setCapability("name", "Automation Test");
-        sauceOptions.setCapability("username", ConfigManager.getSauceUsername());
-        sauceOptions.setCapability("accessKey", ConfigManager.getSauceAccessKey());
-        sauceOptions.setCapability("appiumVersion","appium3-2026-07");
-        System.out.println(sauceOptions);
+
+        sauceOptions.setCapability(
+                "build",
+                ConfigManager.getSauceBuildName()
+        );
+
+        sauceOptions.setCapability(
+                "name",
+                ConfigManager.getSauceTestName()
+        );
+
+        sauceOptions.setCapability(
+                "username",
+                ConfigManager.getSauceUsername()
+        );
+
+        sauceOptions.setCapability(
+                "accessKey",
+                ConfigManager.getSauceAccessKey()
+        );
+
+        // We will verify the supported Appium version before a live Sauce run.
+        sauceOptions.setCapability("appiumVersion", "appium3-2026-07");
+
         return sauceOptions;
     }
 }

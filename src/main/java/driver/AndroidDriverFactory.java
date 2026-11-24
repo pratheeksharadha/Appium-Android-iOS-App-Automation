@@ -1,3 +1,4 @@
+
 package driver;
 
 import config.ConfigManager;
@@ -9,26 +10,58 @@ import utils.LoggerUtils;
 import java.net.MalformedURLException;
 import java.net.URI;
 
-public class AndroidDriverFactory {
+public final class AndroidDriverFactory {
 
-    static AndroidDriver driver;
+    private static final Logger logger =
+            LoggerUtils.getLogger(AndroidDriverFactory.class);
 
-    private static final Logger logger = LoggerUtils.getLogger(AndroidDriverFactory.class);
-    public static AndroidDriver createAndroidDriver() throws MalformedURLException {
+    private AndroidDriverFactory() {
+    }
 
-        logger.info("Creating Android Driver");
-        CapabilityManager capabilityManager = new CapabilityManager();
-        UiAutomator2Options androidOptions =(UiAutomator2Options) capabilityManager.getOptions();
+    public static AndroidDriver createAndroidDriver(String serverUrl)
+            throws MalformedURLException {
 
-        if(ConfigManager.getExecution().equalsIgnoreCase("local")){
-            driver = new AndroidDriver(URI.create(ConfigManager.getAppiumUrl()).toURL(),androidOptions);
-        } else if (ConfigManager.getExecution().equalsIgnoreCase("sauce")) {
-            driver = new AndroidDriver(URI.create(ConfigManager.getSauceUrl()).toURL(),androidOptions);
+        if (serverUrl == null || serverUrl.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Appium server URL cannot be null or blank."
+            );
         }
 
-        DriverManager.setDriver(driver);
-        logger.info("Creating Driver : {} ",ConfigManager.getPlatform());
+        logger.info("Creating Android driver");
+        logger.info("Appium Server URL: {}", serverUrl);
 
-        return driver;
+        try {
+            CapabilityManager capabilityManager = new CapabilityManager();
+
+            Object capabilities = capabilityManager.getOptions();
+
+            if (!(capabilities instanceof UiAutomator2Options options)) {
+                throw new IllegalStateException(
+                        "Android execution requires UiAutomator2Options, but received: "
+                                + (capabilities == null
+                                ? "null"
+                                : capabilities.getClass().getName())
+                );
+            }
+
+            AndroidDriver driver = new AndroidDriver(
+                    URI.create(serverUrl).toURL(),
+                    options
+            );
+
+            logger.info(
+                    "Android driver created successfully. Platform: {}",
+                    ConfigManager.getPlatformName()
+            );
+
+            return driver;
+
+        } catch (MalformedURLException e) {
+            logger.error("Invalid Appium server URL: {}", serverUrl, e);
+            throw e;
+        } catch (RuntimeException e) {
+            logger.error("Failed to create Android driver.", e);
+            throw e;
+        }
     }
 }
