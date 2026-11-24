@@ -65,7 +65,7 @@ public class AppiumServerManager {
         logger.info("Appium Server stopped successfully.");
     }
 
-    public static void restartServer(){
+    public static synchronized void restartServer(){
         logger.info("Restarting Appium Server");
         stopServer();
         startServer();
